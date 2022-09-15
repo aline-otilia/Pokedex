@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Pokedex.Models
 {
-    [Table("PokemonTypes")]
-    public class PokemonTypes
+    [Table("PokemonAbilities")]
+    public class PokemonAbilities
     {
         [Key, Column(Order = 1)]
         public uint PokemonNumber { get; set; }
@@ -13,8 +13,8 @@ namespace Pokedex.Models
         public Pokemons Pokemon { get; set; } = new();
 
         [Key, Column(Order = 2)]
-        public uint TypeId { get; set; }
-        [ForeignKey("TypeId")]
-        public Types Type { get; set; } = new();
+        public uint AbilityId { get; set; }
+        [ForeignKey("AbilityId")]
+        public Abilities Ability { get; set; } = new();
     }
 }
