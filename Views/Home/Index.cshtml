@@ -9,7 +9,7 @@
             <h1>Pokédex</h1>
             @foreach (var type in ViewBag.Types)
             {
-                <a href="#" class="btn my-2 text-white" style="background-color:@type.Color">
+                <a href="#" class="btn btn-sm my-2 text-white" style="background-color:@type.Color">
                     @type.Name
                 </a>
             }
@@ -36,9 +36,9 @@
                                 <div class="btn-group">
                                     @foreach (var ptype in pokemon.Types)
                                     {
-                                       <a href="#" class="btn my-2 text-white" style="background-color:@ptype.Type.Color">
+                                       <a href="#" class="btn btn-sm my-2 text-white" style="background-color:@ptype.Type.Color">
                                          @ptype.Type.Name
-                                        </a>
+                                        </a> 
                                     }
                                 </div>
                                 
@@ -55,7 +55,7 @@
     <script>
         function GetInfo(number)
         {
-            window.location = '@Url.Action("Details", "Home")';
+            window.location = '@Url.Action("Details", "Home")' + '?Number=' + number;
         }
     </script>
 }
