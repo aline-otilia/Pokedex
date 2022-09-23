@@ -40,9 +40,16 @@ public class HomeController : Controller
             .OrderByDescending(p=>p.Number)
             .Where(p=> p.Number < Number).FirstOrDefault();
 
-            var next = _context.Pokemons
+        var next = _context.Pokemons
             .OrderBy(p=>p.Number)
             .Where(p=> p.Number > Number).FirstOrDefault();
+            
+        var pokemon = new Details()
+            {
+                Prior = prior,
+                Current = current,
+                Next = next
+            };
 
         return View(pokemon);
     }
