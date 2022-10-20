@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Pokedex.Models;
 
@@ -13,8 +16,8 @@ namespace Pokedex.Data
         public DbSet<Gender> Genders { get; set; }
         public DbSet<Generation> Generations { get; set; }
         public DbSet<Pokemons> Pokemons { get; set; }
-        public DbSet<PokemonAbilities> PokemonAbilities { get; set; }
-        public DbSet<PokemonTypes> PokemonTypes { get; set; }
+        public DbSet<PokemonAbilities> PokemonsAbilities { get; set; }
+        public DbSet<PokemonTypes> PokemonsTypes { get; set; }
         public DbSet<Types> Types { get; set; }
         public DbSet<Weaknesses> Weaknesses { get; set; }
 
@@ -47,9 +50,9 @@ namespace Pokedex.Data
                 .HasForeignKey(pt => pt.PokemonNumber);
 
             builder.Entity<PokemonTypes>()
-                .HasOne(pa => pa.Type)
+                .HasOne(pt => pt.Type)
                 .WithMany(t => t.PokemonsOfThisType)
-                .HasForeignKey(pa => pa.TypeId);
+                .HasForeignKey(pt => pt.TypeId);
             #endregion
 
             #region Many to Many - Weaknesses
@@ -63,7 +66,7 @@ namespace Pokedex.Data
 
             builder.Entity<Weaknesses>()
                 .HasOne(w => w.Type)
-                .WithMany(t => t.PokemonsWithThisWeaknesses)
+                .WithMany(t => t.PokemonsWithThisWeakness)
                 .HasForeignKey(w => w.TypeId);
             #endregion
         }

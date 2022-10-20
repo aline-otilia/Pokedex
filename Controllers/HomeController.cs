@@ -1,9 +1,8 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using Pokedex.Data;
 using Pokedex.Models;
+using Pokedex.Data;
 using Pokedex.ViewModels;
 
 namespace Pokedex.Controllers;
@@ -19,38 +18,34 @@ public class HomeController : Controller
         _context = context;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(string type)
     {
-        ViewData["Types"] = _context.Types.ToList();
-        var pokemons = _context.Pokemons
-            .Include(p => p.Types)
-            .ThenInclude(t => t.Type).ToList();
-        return View(pokemons);
+        var index = new IndexVM(){
+            Types =  _context.Types.ToList(),
+            Pokemons = _context.Pokemons.OrderBy(p => p.Number)
+                .Include(p => p.Types).ThenInclude(pt => pt.Type).ToList()
+        };
+        ViewData["Filter"] = type ?? "all";
+        return View(index);
     }
+
     public IActionResult Details(uint Number)
     {
         var current = _context.Pokemons
-          .Include(p => p.Types)
-          .ThenInclude(t => t.Type)
-          .Include(p => p.Generation)
-          .Include(p =>p.Gender)
-          .Where(p=>p.Number == Number).SingleOrDefault();
-
-        var prior = _context.Pokemons
-            .OrderByDescending(p=>p.Number)
-            .Where(p=> p.Number < Number).FirstOrDefault();
-
-        var next = _context.Pokemons
-            .OrderBy(p=>p.Number)
-            .Where(p=> p.Number > Number).FirstOrDefault();
-            
-        var pokemon = new Details()
-            {
-                Prior = prior,
-                Current = current,
-                Next = next
-            };
-
+            .Include(p => p.Types).ThenInclude(pt => pt.Type)
+            .Include(p => p.Gender).Include(p => p.Generation)
+            .Where(p => p.Number == Number).SingleOrDefault();
+        var prior = _context.Pokemons.OrderByDescending(p => p.Number)
+            .FirstOrDefault(p => p.Number < Number);
+        var next = _context.Pokemons.OrderBy(p => p.Number)
+            .FirstOrDefault(p => p.Number > Number);
+        
+        var pokemon = new DetailsVM()
+        {   
+            Prior = prior,
+            Current = current,
+            Next = next
+        };
         return View(pokemon);
     }
 
